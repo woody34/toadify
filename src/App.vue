@@ -1,32 +1,60 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
-  </div>
+  <v-app>
+    <v-card class="overflow-hidden" flat>
+      <v-app-bar
+        absolute
+        color="#29B46D"
+        dark
+        shrink-on-scroll
+        prominent
+        src="./assets/toad-banner-2.jpg"
+        fade-img-on-scroll
+        scroll-target="#scrolling-techniques-3"
+      >
+        <template v-slot:img="{ props }">
+          <v-img
+            v-bind="props"
+            gradient="to top right, rgba(56, 233, 142,.7), rgba(28, 121, 73, .7)"
+          ></v-img>
+        </template>
+
+        <v-toolbar-title>Toadify</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+      </v-app-bar>
+      <v-sheet
+        id="scrolling-techniques-3"
+        class="overflow-y-auto"
+        max-height="100vh"
+      >
+        <div class="spacer"></div>
+        <Home />
+      </v-sheet>
+    </v-card>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script lang="ts">
+import Vue from "vue";
+import Home from "@/views/Home.vue";
 
-#nav {
-  padding: 30px;
-}
+export default Vue.extend({
+  name: "App",
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+  components: {
+    Home
+  },
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+  data: () => ({
+    //
+  })
+});
+</script>
+<style scoped>
+.spacer {
+  height: 130px;
+}
+.overflow-y-auto {
+  overflow-y: auto;
 }
 </style>
