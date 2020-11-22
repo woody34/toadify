@@ -21,6 +21,16 @@
         <v-toolbar-title>Toadify</v-toolbar-title>
 
         <v-spacer></v-spacer>
+
+        <v-toolbar-title>
+          <v-btn
+            v-if="!isConnectedToSpotify"
+            color="error"
+            v-on="{ click: login }"
+            :disabled="isConnectedToSpotify"
+            >Connect Spotify</v-btn
+          >
+        </v-toolbar-title>
       </v-app-bar>
       <v-sheet
         id="scrolling-techniques-3"
@@ -28,7 +38,7 @@
         max-height="100vh"
       >
         <div class="spacer"></div>
-        <Home />
+        <Home v-if="isConnectedToSpotify" />
       </v-sheet>
     </v-card>
   </v-app>
@@ -37,16 +47,27 @@
 <script lang="ts">
 import Vue from "vue";
 import Home from "@/views/Home.vue";
+import { spotifyAuthService } from "./service/spotify";
 
 export default Vue.extend({
   name: "App",
-
+  mounted() {
+    this.checkSpotifyConnection();
+  },
+  methods: {
+    async login() {
+      const authUrl = (await spotifyAuthService.login()).data;
+      window.location = authUrl;
+    },
+    async checkSpotifyConnection() {
+      this.isConnectedToSpotify = (await spotifyAuthService.connected()).data;
+    }
+  },
   components: {
     Home
   },
-
   data: () => ({
-    //
+    isConnectedToSpotify: false
   })
 });
 </script>

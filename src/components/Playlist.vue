@@ -3,6 +3,7 @@
     <v-row>
       <v-spacer />
       <v-data-table v-bind="{ headers, items: tracks }">
+        <!-- image -->
         <template v-slot:[`item.image`]="{ item }">
           <td>
             <v-card flat class="rounded-0">
@@ -27,9 +28,16 @@
             </v-card>
           </td>
         </template>
+        <!-- duration -->
         <template v-slot:[`item.duration`]="{ item }">
           <td>
             {{ filterDuration(item) }}
+          </td>
+        </template>
+        <!-- title -->
+        <template v-slot:[`item.title`]="{ item }">
+          <td>
+            <a :href="item.url" target="_blank">{{ item.title }}</a>
           </td>
         </template>
       </v-data-table>
@@ -39,11 +47,12 @@
 </template>
 
 <script lang="ts">
-import { TrackData } from "@/service/tracks";
+import { TrackData } from "@/service/spotify";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Emit, Prop } from "vue-property-decorator";
 import { headers, filterDuration } from "./util";
+
 @Component({
   name: "playlist",
   data() {
@@ -65,6 +74,7 @@ export default class Playlist extends Vue {
   }
 
   matchesCurrentTrack = (track: TrackData) => {
+    console.log(track._id, this.track?._id);
     return track._id === this.track?._id;
   };
 }

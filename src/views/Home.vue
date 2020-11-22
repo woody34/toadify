@@ -16,13 +16,9 @@
 import { Component, Vue } from "vue-property-decorator";
 import Playlist from "@/components/Playlist.vue";
 import Player from "@/components/Player.vue";
-import { mockTrack, TrackData } from "@/service/tracks";
-
-interface PlayerState {
-  tracks: TrackData[];
-  track?: TrackData;
-  playing: boolean;
-}
+import { TrackData } from "@/service/spotify";
+import { spotifyPlayerService } from "@/service/spotify";
+import { PlayerState } from "@/store";
 
 @Component({
   components: {
@@ -31,9 +27,8 @@ interface PlayerState {
   }
 })
 export default class Home extends Vue {
-  // Lifecycle Hook
   mounted() {
-    this.loadTracks();
+    this.loadPlayerState();
   }
 
   // State
@@ -56,57 +51,51 @@ export default class Home extends Vue {
     return this.state.playing;
   }
 
-  // Mutations
-  setTracks(tracks: TrackData[]) {
-    this.state.tracks = tracks;
-  }
-
-  setTrack(track?: TrackData) {
-    this.state.track = track;
-  }
-
-  setPlaying(playing: boolean) {
-    this.state.playing = playing;
-  }
-
   // Actions
-  loadTracks() {
-    const tracks = Array(50)
-      .fill(0)
-      .map(mockTrack);
-    this.setTracks(tracks);
+  async loadPlayerState() {
+    const state: PlayerState = (await spotifyPlayerService.state()).data;
+    this.state = state;
   }
 
-  play(track?: TrackData) {
-    this.setTrack(track);
-    this.setPlaying(Boolean(track));
+  async play(track?: TrackData) {
+    if (track) {
+      await spotifyPlayerService.play(track.uri);
+      await this.loadPlayerState();
+    } else {
+      this.pause();
+    }
   }
 
-  pause() {
-    this.setPlaying(false);
+  async pause() {
+    await spotifyPlayerService.pause();
+    this.loadPlayerState();
   }
 
-  next() {
+  async next() {
     if (!this.track) {
       return;
     }
-    const newTrackIndex = this.tracks.indexOf(this.track) + 1;
+    const [oldTrack] = this.tracks.filter(
+      track => track._id === this.track?._id
+    );
+    const newTrackIndex = this.tracks.indexOf(oldTrack) + 1;
     const newTrack = this.tracks[newTrackIndex];
     if (newTrack) {
-      this.setTrack(newTrack);
-      this.setPlaying(Boolean(newTrack));
+      await this.play(newTrack);
     }
   }
 
-  previous() {
+  async previous() {
     if (!this.track) {
       return;
     }
-    const newTrackIndex = this.tracks.indexOf(this.track) - 1;
+    const [oldTrack] = this.tracks.filter(
+      track => track._id === this.track?._id
+    );
+    const newTrackIndex = this.tracks.indexOf(oldTrack) - 1;
     const newTrack = this.tracks[newTrackIndex];
     if (newTrack) {
-      this.setTrack(newTrack);
-      this.setPlaying(Boolean(newTrack));
+      await this.play(newTrack);
     }
   }
 }

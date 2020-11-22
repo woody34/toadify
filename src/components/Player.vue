@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { TrackData } from "@/service/tracks";
+import { TrackData } from "@/service/spotify";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Emit, Prop } from "vue-property-decorator";

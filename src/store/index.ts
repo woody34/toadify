@@ -1,3 +1,4 @@
+import { TrackData } from "@/service/spotify";
 import Vue from "vue";
 import Vuex from "vuex";
 
@@ -9,3 +10,8 @@ export default new Vuex.Store({
   actions: {},
   modules: {}
 });
+export interface PlayerState {
+  tracks: TrackData[];
+  track?: TrackData;
+  playing: boolean;
+}

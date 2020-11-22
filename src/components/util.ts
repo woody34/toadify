@@ -1,4 +1,4 @@
-import { TrackData } from "@/service/tracks";
+import { TrackData } from "@/service/spotify";
 
 export const headers = [
   {
@@ -16,9 +16,14 @@ export const headers = [
     text: "Title"
   },
   {
-    value: "description",
-    text: "Description"
+    value: "album",
+    text: "Album"
+  },
+  {
+    value: "addedBy",
+    text: "Contributor"
   }
 ];
+
 export const filterDuration = (item: TrackData) =>
-  new Date(item.duration * 1000).toISOString().substr(11, 8);
+  new Date(item.duration * 1000).toISOString().substr(11, 5);
