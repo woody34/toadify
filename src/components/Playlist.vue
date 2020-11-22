@@ -74,7 +74,6 @@ export default class Playlist extends Vue {
   }
 
   matchesCurrentTrack = (track: TrackData) => {
-    console.log(track._id, this.track?._id);
     return track._id === this.track?._id;
   };
 }

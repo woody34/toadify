@@ -38,7 +38,7 @@
         max-height="100vh"
       >
         <div class="spacer"></div>
-        <Home v-if="isConnectedToSpotify" />
+        <Page v-if="isConnectedToSpotify" />
       </v-sheet>
     </v-card>
   </v-app>
@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Home from "@/views/Home.vue";
+import Page from "@/views/Page.vue";
 import { spotifyAuthService } from "./service/spotify";
 
 export default Vue.extend({
@@ -64,7 +64,7 @@ export default Vue.extend({
     }
   },
   components: {
-    Home
+    Page
   },
   data: () => ({
     isConnectedToSpotify: false

@@ -26,7 +26,7 @@ import { PlayerState } from "@/store";
     Player
   }
 })
-export default class Home extends Vue {
+export default class Page extends Vue {
   mounted() {
     this.loadPlayerState();
   }
