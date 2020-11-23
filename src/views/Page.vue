@@ -24,10 +24,17 @@ import { PlayerState } from "@/store";
   components: {
     Playlist,
     Player
+  },
+  data() {
+    return {
+      key1: "value-1",
+      key2: "value-2"
+    };
   }
 })
 export default class Page extends Vue {
   mounted() {
+    console.log(this);
     this.loadPlayerState();
   }
 
